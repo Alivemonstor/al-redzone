@@ -1,8 +1,8 @@
-local QBCore = exports['qb-core']:GetCoreObject()
 local time = 0
 
 CreateThread(function()
-	for k, v in pairs(Config.Locations) do
+		for i = 1, #Config.Locations do
+        local v = Config.Locations[i]
 		local blipradius = AddBlipForRadius(v.coords,v.blipradius)
 		local blipscenter = AddBlipForCoord(v.coords)
 		SetBlipSprite(blipscenter, v.sprite)
@@ -20,11 +20,17 @@ CreateThread(function()
 		redzone:onPlayerInOut(function(isPointInside)
 			if isPointInside then
 				inZone = 1
-				QBCore.Functions.Notify('You\'ve entered a red zone, a 30 second timer has started and you cannot leave until then.', 'error')
+					lib.notify({
+						description = 'You\'ve entered a red zone, a 30 second timer has started and you cannot leave until then.',
+						type = 'error'
+					})
 				time = 30
 			else
 				inZone = 0
-				QBCore.Functions.Notify('You\'ve left a red zone', 'error')
+				lib.notify({
+					description = 'You\'ve left a red zone',
+					type = 'error'
+				})
 			end
 		end)
 	end
@@ -36,7 +42,7 @@ CreateThread(function()
 		while time > 0 do
 			Wait(10)
 			if inZone == 0 and time > 1 then
-				SetEntityCoords(PlayerPedId(),coords.x,coords.y,coords.z)
+				SetEntityCoords(cache.ped,coords.x,coords.y,coords.z)
 				time = 30
 			end
 			if inZone == 1 and time >= 0 then
