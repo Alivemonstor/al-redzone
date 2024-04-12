@@ -12,7 +12,6 @@ CreateThread(function()
 		BeginTextCommandSetBlipName('STRING')
 		AddTextComponentString('Red Zone | Combat Enforced')
 		EndTextCommandSetBlipName(blipscenter)
-		coords = v.coords
 		redzone = CircleZone:Create(v.coords, v.blipradius, {
 			name = 'redzone',
 			debugPoly = false,
@@ -21,6 +20,7 @@ CreateThread(function()
 			if isPointInside then
 				inZone = 1
 				QBCore.Functions.Notify('You\'ve entered a red zone, a 30 second timer has started and you cannot leave until then.', 'error')
+				coords = v.coords
 				time = 30
 			else
 				inZone = 0
